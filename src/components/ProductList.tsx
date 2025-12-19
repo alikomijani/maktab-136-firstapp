@@ -42,7 +42,7 @@ export default function ProductList(props: ProductListProps) {
           }}
         />
         {productList
-          .filter((product) => product.name.startsWith(search))
+          .filter((product) => product.name.includes(search))
           .map((item) => (
             <ProductCard
               key={item.id}
