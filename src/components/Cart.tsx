@@ -19,6 +19,7 @@ export default function Cart({
         width: "400px",
         borderRadius: "25px",
         padding: "15px",
+        backgroundColor: "white",
       }}
     >
       <div

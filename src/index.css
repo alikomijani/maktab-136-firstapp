@@ -1,3 +1,6 @@
 :root {
   --stroke-color: #9f9d9dff;
 }
+body {
+  background-color: #f0efef;
+}

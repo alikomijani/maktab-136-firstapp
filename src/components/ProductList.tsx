@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Product } from "../App";
 import { ProductCard } from "./ProductCard";
 
@@ -11,6 +12,7 @@ type ProductListProps = {
 };
 export default function ProductList(props: ProductListProps) {
   const { addToCart } = props;
+  const [search, setSearch] = useState("");
   return (
     <div
       style={{
@@ -18,6 +20,7 @@ export default function ProductList(props: ProductListProps) {
         width: "100%",
         borderRadius: "25px",
         padding: "15px",
+        backgroundColor: "white",
       }}
     >
       <div
@@ -27,17 +30,29 @@ export default function ProductList(props: ProductListProps) {
           gap: "10px",
         }}
       >
-        <h2>ali</h2>
-        {productList.map((item) => (
-          <ProductCard
-            key={item.id}
-            id={item.id}
-            image={item.image}
-            price={item.price}
-            name={item.name}
-            handleAdd={() => addToCart(item)}
-          />
-        ))}
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search"
+          style={{
+            border: "1px solid var(--stroke-color)",
+            padding: "10px 15px",
+            borderRadius: "25px",
+            fontSize: 16,
+          }}
+        />
+        {productList
+          .filter((product) => product.name.startsWith(search))
+          .map((item) => (
+            <ProductCard
+              key={item.id}
+              id={item.id}
+              image={item.image}
+              price={item.price}
+              name={item.name}
+              handleAdd={() => addToCart(item)}
+            />
+          ))}
       </div>
     </div>
   );
