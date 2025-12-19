@@ -1,0 +1,22 @@
+.product-card {
+  border: 1px solid var(--stroke-color);
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.product-card--body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product-card img {
+  border-radius: 10px;
+}
+
+.small h2 {
+  font-size: 14px;
+}
+
+.medium h2 {
+  font-size: 14px;
+}
