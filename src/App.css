@@ -1,0 +1,30 @@
+.container {
+  width: 500px;
+  margin: 0 auto;
+}
+
+.form-field {
+  padding: 10px;
+}
+
+.form-field label {
+  color: rgb(39, 38, 38);
+}
+
+.form-field input {
+  display: block;
+  width: 90%;
+  margin-top: 5px;
+  padding: 10px 15px;
+  font-size: 1.2rem;
+}
+.form-field.error label {
+  color: red;
+}
+
+.form-field.error input {
+  color: red;
+}
+.form-error {
+  color: red;
+}
