@@ -1,18 +1,41 @@
-import { useState } from "react";
-import type { Product } from "../App";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "./ProductCard";
+import { getProducts, type Product } from "../api/api";
+import { ProductCardSkeleton } from "./ProductCardSkeleton";
 
-const productList = [
-  { id: 1, name: "persian food", price: 100, image: "/image/food.jpeg" },
-  { id: 2, name: "kabab", price: 150, image: "/image/food.jpeg" },
-  { id: 3, name: "burger", price: 110, image: "/image/food.jpeg" },
-];
 type ProductListProps = {
   addToCart: (item: Product) => void;
 };
 export default function ProductList(props: ProductListProps) {
+  const [products, setProducts] = useState<Array<Product>>([]);
+
+  const [isLoading, setIsLoading] = useState(true);
   const { addToCart } = props;
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    // component did mount
+    getProducts().then((data) => {
+      setProducts(data);
+      setIsLoading(false);
+    });
+  }, []);
+  // without extra rerender but has expensive calculation on every rerender
+  // const filteredProducts = products.filter((product) =>
+  //   product.name.includes(search)
+  // );
+  // one extra rerender
+  // const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
+  // useEffect(() => {
+  //   setFilteredProducts(
+  //     products.filter((product) => product.name.includes(search))
+  //   );
+  // }, [products, search]);
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => product.name.includes(search));
+  }, [products, search]);
+
   return (
     <div
       style={{
@@ -41,9 +64,10 @@ export default function ProductList(props: ProductListProps) {
             fontSize: 16,
           }}
         />
-        {productList
-          .filter((product) => product.name.includes(search))
-          .map((item) => (
+        {isLoading ? (
+          <ProductCardSkeleton />
+        ) : (
+          filteredProducts.map((item) => (
             <ProductCard
               key={item.id}
               id={item.id}
@@ -52,8 +76,22 @@ export default function ProductList(props: ProductListProps) {
               name={item.name}
               handleAdd={() => addToCart(item)}
             />
-          ))}
+          ))
+        )}
       </div>
     </div>
   );
 }
+
+// let olddep = [];
+// let value = null;
+// function useMemo(callback: () => any, dependency: any[]) {
+//   for (let i = 0; i < dependency.length; i++)
+//     if (!Object.is(dependency[i], olddep[i])) {
+//       value = callback();
+//       olddep = dependency;
+//       break;
+//     }
+
+//   return value;
+// }

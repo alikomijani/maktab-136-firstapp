@@ -1,5 +1,9 @@
 import clsx from "clsx";
-import { useState, type FormEventHandler } from "react";
+import {
+  useState,
+  type ChangeEventHandler,
+  type FormEventHandler,
+} from "react";
 
 type RegisterData = {
   firstName: string;
@@ -12,28 +16,35 @@ type RegisterData = {
 
 // function useState(defaultValue) {
 //   const state = defaultValue;
-//   const setState = (value) => {
+//   const setState = async (value) => {
 //     if (typeof value === "function") {
 //       state = value(state);
-//       rerender();
 //     } else {
 //       state = value;
-//       rerender();
 //     }
+//     rerender();
 //   };
 
 //   return [state, setState];
 // }
 
 export default function Register() {
+  const [data, setData] = useState<RegisterData>({
+    email: "",
+    firstName: "",
+    lastName: "",
+    mobile: "",
+    password: "",
+    password2: "",
+  });
+
   const [errors, setErrors] = useState<
     Partial<Record<keyof RegisterData, string>>
   >({});
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+
     if (isNaN(+data.mobile)) {
       setErrors((oldErrors) => ({
         ...oldErrors,
@@ -53,22 +64,44 @@ export default function Register() {
       }));
     }
   };
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name, value } = e.target;
+    setData((oldData) => ({ ...oldData, [name]: value }));
+  };
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
+      <form noValidate onSubmit={handleSubmit}>
         <div className="form-field">
           <label htmlFor="firstName">first name</label>
-          <input type="text" name="firstName" id="firstName" />
+          <input
+            onChange={handleChange}
+            value={data.firstName}
+            type="text"
+            name="firstName"
+            id="firstName"
+          />
         </div>
 
         <div className="form-field">
           <label htmlFor="lastName">last name</label>
-          <input type="text" name="lastName" id="lastName" />
+          <input
+            onChange={handleChange}
+            value={data.lastName}
+            type="text"
+            name="lastName"
+            id="lastName"
+          />
         </div>
 
         <div className={clsx("form-field", errors.mobile && "error")}>
           <label htmlFor="mobile">mobile</label>
-          <input type="text" name="mobile" id="mobile" />
+          <input
+            onChange={handleChange}
+            value={data.mobile}
+            type="text"
+            name="mobile"
+            id="mobile"
+          />
           {errors.mobile && (
             <small className="form-error">{errors.mobile}</small>
           )}
@@ -76,13 +109,25 @@ export default function Register() {
 
         <div className="form-field">
           <label htmlFor="email">email </label>
-          <input type="email" name="email" id="email" />
+          <input
+            onChange={handleChange}
+            value={data.email}
+            type="email"
+            name="email"
+            id="email"
+          />
           {errors.email && <small className="form-error">{errors.email}</small>}
         </div>
 
         <div className="form-field">
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" />
+          <input
+            onChange={handleChange}
+            value={data.password}
+            type="password"
+            name="password"
+            id="password"
+          />
           {errors.password && (
             <small className="form-error">{errors.password}</small>
           )}
@@ -90,7 +135,13 @@ export default function Register() {
 
         <div className="form-field">
           <label htmlFor="password2">repeat password</label>
-          <input type="password" name="password2" id="password2" />
+          <input
+            onChange={handleChange}
+            value={data.password2}
+            type="password"
+            name="password2"
+            id="password2"
+          />
           {errors.password2 && (
             <small className="form-error">{errors.password2}</small>
           )}

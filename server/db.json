@@ -1,0 +1,85 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "نیمرو رژیمی",
+      "category": "صبحانه",
+      "description": "۳ عدد تخم مرغ زرده طلایی، بدون روغن، دورچین: فلفل، پیاز، لیمو ترش، به همراه نصف نان بربری",
+      "price": 45000,
+      "image": "https://picsum.photos/400/300?random=1"
+    },
+    {
+      "id": 2,
+      "name": "املت گوجه فرنگی",
+      "category": "صبحانه",
+      "description": "تخم مرغ تازه، گوجه فرنگی رنده شده، ادویه، بدون روغن، سرو با نان سنگک",
+      "price": 50000,
+      "image": "https://picsum.photos/400/300?random=2"
+    },
+    {
+      "id": 3,
+      "name": "عدسی",
+      "category": "صبحانه",
+      "description": "عدس پخته، سیب زمینی، پیاز، زردچوبه، بسیار مقوی و مناسب صبحانه",
+      "price": 40000,
+      "image": "https://picsum.photos/400/300?random=3"
+    },
+    {
+      "id": 4,
+      "name": "کوکو سبزی",
+      "category": "ناهار",
+      "description": "سبزی کوکو تازه، تخم مرغ، پخته شده در فر، سرو با ماست",
+      "price": 85000,
+      "image": "https://picsum.photos/400/300?random=4"
+    },
+    {
+      "id": 5,
+      "name": "میرزا قاسمی",
+      "category": "ناهار",
+      "description": "بادمجان کبابی، گوجه، تخم مرغ، سیر، غذای اصیل گیلانی",
+      "price": 90000,
+      "image": "https://picsum.photos/400/300?random=5"
+    },
+    {
+      "id": 6,
+      "name": "خوراک لوبیا چیتی",
+      "category": "رژیمی",
+      "description": "لوبیا چیتی پخته، قارچ، سیب زمینی، بدون روغن، مناسب رژیم",
+      "price": 70000,
+      "image": "https://picsum.photos/400/300?random=6"
+    },
+    {
+      "id": 7,
+      "name": "آبگوشت ساده",
+      "category": "سنتی",
+      "description": "گوشت گوسفندی، نخود، لوبیا، سیب زمینی، بدون دنبه",
+      "price": 120000,
+      "image": "https://picsum.photos/400/300?random=7"
+    },
+    {
+      "id": 8,
+      "name": "زرشک پلو با مرغ",
+      "category": "ناهار",
+      "description": "برنج ایرانی، مرغ بخارپز، زرشک، زعفران دم‌کرده",
+      "price": 140000,
+      "image": "https://picsum.photos/400/300?random=8"
+    },
+    {
+      "id": 9,
+      "name": "چلو کباب تابه‌ای",
+      "category": "شام",
+      "description": "گوشت چرخ‌کرده، پیاز، ادویه، پخته شده بدون روغن اضافه",
+      "price": 160000,
+      "image": "https://picsum.photos/400/300?random=9"
+    },
+    {
+      "id": 10,
+      "name": "کشک بادمجان",
+      "category": "سنتی",
+      "description": "بادمجان کبابی، کشک، سیر، نعناع خشک، غذای سنتی ایرانی",
+      "price": 95000,
+      "image": "https://picsum.photos/400/300?random=10"
+    }
+  ],
+  "profile": { "name": "typicode" }
+}
