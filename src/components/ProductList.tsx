@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { getProducts, type Product } from "../api/api";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
@@ -8,6 +8,7 @@ type ProductListProps = {
 };
 export default function ProductList(props: ProductListProps) {
   const [products, setProducts] = useState<Array<Product>>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const { addToCart } = props;
@@ -20,50 +21,43 @@ export default function ProductList(props: ProductListProps) {
       setIsLoading(false);
     });
   }, []);
-  // without extra rerender but has expensive calculation on every rerender
-  // const filteredProducts = products.filter((product) =>
-  //   product.name.includes(search)
-  // );
-  // one extra rerender
-  // const [filteredProducts, setFilteredProducts] = useState<Array<Product>>([]);
-  // useEffect(() => {
-  //   setFilteredProducts(
-  //     products.filter((product) => product.name.includes(search))
-  //   );
-  // }, [products, search]);
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => product.name.includes(search));
+  const { filteredProducts, totalSum } = useMemo(() => {
+    const filteredProducts = products.filter((product) =>
+      product.name.includes(search),
+    );
+
+    const totalSum = filteredProducts.reduce(
+      (acc, product) => acc + product.price,
+      0,
+    );
+
+    return {
+      filteredProducts,
+      totalSum,
+    };
   }, [products, search]);
 
   return (
-    <div
-      style={{
-        border: "1px solid var(--stroke-color)",
-        width: "100%",
-        borderRadius: "25px",
-        padding: "15px",
-        backgroundColor: "white",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search"
-          style={{
-            border: "1px solid var(--stroke-color)",
-            padding: "10px 15px",
-            borderRadius: "25px",
-            fontSize: 16,
-          }}
-        />
+    <div className="w-full rounded-2xl border border-gray-300 p-4">
+      <div className="flex flex-col gap-2.5">
+        <div className="flex justify-between gap-4">
+          <input
+            ref={inputRef}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search"
+            className="grow rounded-2xl border border-gray-300 px-2.5 py-3.5"
+          />
+          <button
+            onClick={() => {
+              inputRef.current?.focus();
+            }}
+          >
+            focus
+          </button>
+        </div>
+
         {isLoading ? (
           <ProductCardSkeleton />
         ) : (
@@ -79,6 +73,7 @@ export default function ProductList(props: ProductListProps) {
           ))
         )}
       </div>
+      <div>جمع کل : {totalSum.toLocaleString("fa")}</div>
     </div>
   );
 }

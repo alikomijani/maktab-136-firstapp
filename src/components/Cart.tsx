@@ -1,4 +1,4 @@
-import type { Product } from "../App";
+import type { Product } from "../api/api";
 import { ProductCard } from "./ProductCard";
 
 type CartProps = {
@@ -13,22 +13,8 @@ export default function Cart({
   removeFromCart,
 }: CartProps) {
   return (
-    <div
-      style={{
-        border: "1px solid var(--stroke-color)",
-        width: "400px",
-        borderRadius: "25px",
-        padding: "15px",
-        backgroundColor: "white",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
+    <div className="max-w-2xs rounded-2xl border border-gray-300 p-3">
+      <div className="flex flex-col gap-2.5">
         {cartItems.length === 0 ? <h1>سبد خرید شما خالی است.</h1> : undefined}
         {cartItems.map(({ product, count }) => (
           <div key={product.id}>
@@ -41,7 +27,7 @@ export default function Cart({
               handleRemove={() => removeFromCart(product)}
               handleAdd={() => addToCart(product)}
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div className="flex justify-between">
               <p>count: {count}</p>
               <p>price: {count * product.price}$</p>
             </div>
