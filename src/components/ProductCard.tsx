@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { CartContext } from "../context/cartContext";
+import { CartActionType } from "../reducers/cartReducer";
+import type { Product } from "../api/api";
 
 export type ProductCardProps = {
   id: number;
@@ -8,22 +11,15 @@ export type ProductCardProps = {
   discount?: number;
   discountEndTime?: string;
   size?: "small" | "medium";
-  handleAdd?: () => void;
-  handleRemove?: () => void;
+  category: Product["category"];
+  description: Product["description"];
 };
 
 export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
-  const {
-    handleAdd,
-    handleRemove,
-    image,
-    name,
-    price,
-    discount,
-    discountEndTime,
-  } = props;
+  const { image, name, price, discount, discountEndTime, id } = props;
+  const { dispatchCartAction, cart } = useContext(CartContext);
+  const itemInCart = cart.find((item) => item.product.id === id);
   const imageSize = size === "medium" ? 120 : 75;
-
   const discountedPrice = discount ? price - discount * price : null;
   const [counter, setCounter] = useState(0);
   useEffect(() => {
@@ -69,10 +65,47 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
               <p>{price.toLocaleString("fa")}</p>
             )}
           </div>
-          {handleAdd && <button onClick={handleAdd}>Add to cart</button>}
-          {handleRemove && (
-            <button onClick={handleRemove}>remove from cart</button>
-          )}
+          <div>
+            {itemInCart ? (
+              <div className="flex items-center gap-2">
+                <button
+                  className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
+                  onClick={() => {
+                    dispatchCartAction({
+                      type: CartActionType.ADD,
+                      payload: props,
+                    });
+                  }}
+                >
+                  +
+                </button>
+                <p>{itemInCart.count}</p>
+                <button
+                  className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
+                  onClick={() => {
+                    dispatchCartAction({
+                      type: CartActionType.DECREASE,
+                      payload: props,
+                    });
+                  }}
+                >
+                  -
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  dispatchCartAction({
+                    type: CartActionType.ADD,
+                    payload: props,
+                  });
+                }}
+                className="rounded-lg bg-red-700 px-1.5 py-1 text-white"
+              >
+                افزودن به سبد خرید
+              </button>
+            )}
+          </div>
         </div>
         <img
           className="rounded-2xl"

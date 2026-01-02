@@ -1,25 +1,14 @@
-import {
-  memo,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ActionDispatch,
-} from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { getProducts, type Product } from "../api/api";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
-import { CartActionType, type CartAction } from "../pages/cartReducer";
+import Card from "./Card";
 
-type ProductListProps = {
-  dispatch: ActionDispatch<[action: CartAction]>;
-};
-function ProductList(props: ProductListProps) {
+function ProductList() {
   const [products, setProducts] = useState<Array<Product>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   console.log("render ProductList");
   const [isLoading, setIsLoading] = useState(true);
-  const { dispatch } = props;
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -52,7 +41,7 @@ function ProductList(props: ProductListProps) {
   }, [products, search]);
 
   return (
-    <div className="w-full rounded-2xl border border-gray-300 p-4">
+    <Card className="w-full">
       <div className="flex flex-col gap-2.5">
         <div className="flex justify-between gap-4">
           <input
@@ -83,15 +72,14 @@ function ProductList(props: ProductListProps) {
               name={item.name}
               discount={item.discount}
               discountEndTime={item.discountEndTime}
-              handleAdd={() =>
-                dispatch({ type: CartActionType.ADD, payload: item })
-              }
+              category={item.category}
+              description={item.description}
             />
           ))
         )}
       </div>
       <div>جمع کل : {totalSum.toLocaleString("fa")}</div>
-    </div>
+    </Card>
   );
 }
-export default ProductList;
+export default memo(ProductList);

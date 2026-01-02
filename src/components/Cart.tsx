@@ -1,32 +1,16 @@
-import { useCallback, useEffect } from "react";
-import type { Product } from "../api/api";
 import { ProductCard } from "./ProductCard";
+import Card from "./Card";
+import { useContext } from "react";
+import { CartContext } from "../context/cartContext";
 
-type CartProps = {
-  cartItems: { product: Product; count: number }[];
-  addToCart: (item: Product) => void;
-  removeFromCart: (item: Product) => void;
-};
-
-export default function Cart({
-  cartItems,
-  addToCart,
-  removeFromCart,
-}: CartProps) {
-  const scrollHandler = useCallback((e: Event) => {
-    console.log(e);
-  }, []);
-  useEffect(() => {
-    document.body.addEventListener("scroll", scrollHandler);
-    return () => {
-      document.body.removeEventListener("scroll", scrollHandler);
-    };
-  }, []);
+export default function Cart() {
+  console.log("cart render");
+  const { cart } = useContext(CartContext);
   return (
-    <div className="max-w-2xs rounded-2xl border border-gray-300 p-3">
+    <Card className="max-w-2xs">
       <div className="flex flex-col gap-2.5">
-        {cartItems.length === 0 ? <h1>سبد خرید شما خالی است.</h1> : undefined}
-        {cartItems.map(({ product, count }) => (
+        {cart.length === 0 ? <h1>سبد خرید شما خالی است.</h1> : undefined}
+        {cart.map(({ product, count }) => (
           <div key={product.id}>
             <ProductCard
               id={product.id}
@@ -34,8 +18,10 @@ export default function Cart({
               price={product.price}
               name={product.name}
               size="small"
-              handleRemove={() => removeFromCart(product)}
-              handleAdd={() => addToCart(product)}
+              category={product.category}
+              description={product.description}
+              discount={product.discount}
+              discountEndTime={product.discountEndTime}
             />
             <div className="flex justify-between">
               <p>count: {count}</p>
@@ -44,6 +30,6 @@ export default function Cart({
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   );
 }
