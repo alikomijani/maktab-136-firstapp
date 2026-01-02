@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import type { Product } from "../api/api";
 import { ProductCard } from "./ProductCard";
 
@@ -12,6 +13,15 @@ export default function Cart({
   addToCart,
   removeFromCart,
 }: CartProps) {
+  const scrollHandler = useCallback((e: Event) => {
+    console.log(e);
+  }, []);
+  useEffect(() => {
+    document.body.addEventListener("scroll", scrollHandler);
+    return () => {
+      document.body.removeEventListener("scroll", scrollHandler);
+    };
+  }, []);
   return (
     <div className="max-w-2xs rounded-2xl border border-gray-300 p-3">
       <div className="flex flex-col gap-2.5">

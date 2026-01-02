@@ -6,7 +6,7 @@ export enum CartActionType {
   DECREASE,
   CLEAR,
 }
-type CartAction =
+export type CartAction =
   | {
       type: CartActionType.CLEAR;
       payload?: undefined;

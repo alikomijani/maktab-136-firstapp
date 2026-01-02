@@ -1,25 +1,38 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ActionDispatch,
+} from "react";
 import { ProductCard } from "./ProductCard";
 import { getProducts, type Product } from "../api/api";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
+import { CartActionType, type CartAction } from "../pages/cartReducer";
 
 type ProductListProps = {
-  addToCart: (item: Product) => void;
+  dispatch: ActionDispatch<[action: CartAction]>;
 };
-export default function ProductList(props: ProductListProps) {
+function ProductList(props: ProductListProps) {
   const [products, setProducts] = useState<Array<Product>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  console.log("render ProductList");
   const [isLoading, setIsLoading] = useState(true);
-  const { addToCart } = props;
+  const { dispatch } = props;
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // component did mount
-    getProducts().then((data) => {
+    let controller = new AbortController();
+    const signal = controller.signal;
+
+    getProducts(signal).then((data) => {
       setProducts(data);
       setIsLoading(false);
     });
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const { filteredProducts, totalSum } = useMemo(() => {
@@ -68,7 +81,11 @@ export default function ProductList(props: ProductListProps) {
               image={item.image}
               price={item.price}
               name={item.name}
-              handleAdd={() => addToCart(item)}
+              discount={item.discount}
+              discountEndTime={item.discountEndTime}
+              handleAdd={() =>
+                dispatch({ type: CartActionType.ADD, payload: item })
+              }
             />
           ))
         )}
@@ -77,16 +94,4 @@ export default function ProductList(props: ProductListProps) {
     </div>
   );
 }
-
-// let olddep = [];
-// let value = null;
-// function useMemo(callback: () => any, dependency: any[]) {
-//   for (let i = 0; i < dependency.length; i++)
-//     if (!Object.is(dependency[i], olddep[i])) {
-//       value = callback();
-//       olddep = dependency;
-//       break;
-//     }
-
-//   return value;
-// }
+export default ProductList;

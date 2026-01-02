@@ -6,15 +6,12 @@ import { CartActionType, cartReducer } from "./cartReducer";
 
 function Home() {
   const [cart, dispatch] = useReducer(cartReducer, []);
+  console.log("render Home");
 
   return (
     <div className="container mx-auto max-w-2xl">
       <div className="flex justify-between gap-5">
-        <ProductList
-          addToCart={(item) =>
-            dispatch({ type: CartActionType.ADD, payload: item })
-          }
-        />
+        <ProductList dispatch={dispatch} />
         <Cart
           removeFromCart={(item) =>
             dispatch({

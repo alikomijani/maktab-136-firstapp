@@ -6,7 +6,9 @@
       "category": "صبحانه",
       "description": "۳ عدد تخم مرغ زرده طلایی، بدون روغن، دورچین: فلفل، پیاز، لیمو ترش، به همراه نصف نان بربری",
       "price": 45000,
-      "image": "https://picsum.photos/400/300?random=1"
+      "image": "https://picsum.photos/400/300?random=1",
+      "discount": 0.2,
+      "discountEndTime": "2026-01-02T09:21:26.970Z"
     },
     {
       "id": 2,
@@ -30,7 +32,9 @@
       "category": "ناهار",
       "description": "سبزی کوکو تازه، تخم مرغ، پخته شده در فر، سرو با ماست",
       "price": 85000,
-      "image": "https://picsum.photos/400/300?random=4"
+      "image": "https://picsum.photos/400/300?random=4",
+      "discount": 0.1,
+      "discountEndTime": "2026-01-02T11:21:26.970Z"
     },
     {
       "id": 5,
@@ -38,7 +42,9 @@
       "category": "ناهار",
       "description": "بادمجان کبابی، گوجه، تخم مرغ، سیر، غذای اصیل گیلانی",
       "price": 90000,
-      "image": "https://picsum.photos/400/300?random=5"
+      "image": "https://picsum.photos/400/300?random=5",
+      "discount": 0.3,
+      "discountEndTime": "2026-01-02T12:21:26.970Z"
     },
     {
       "id": 6,
