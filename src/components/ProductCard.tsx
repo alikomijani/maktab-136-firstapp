@@ -3,6 +3,7 @@ import { CartContext } from "../context/CartContext";
 import { CartActionType } from "../reducers/cartReducer";
 import type { Product } from "../api/api";
 import clsx from "clsx";
+import useCountDown from "../hooks/useCountDown";
 
 export type ProductCardProps = {
   id: number;
@@ -19,31 +20,10 @@ export type ProductCardProps = {
 export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
   const { image, name, price, discount, discountEndTime, id } = props;
   const { dispatchCartAction, cart } = useContext(CartContext);
+  const { counter } = useCountDown(discountEndTime);
   const itemInCart = cart.find((item) => item.product.id === id);
   const imageSize = size === "medium" ? 140 : "auto";
   const discountedPrice = discount ? price - discount * price : null;
-  const [counter, setCounter] = useState(0);
-  useEffect(() => {
-    let timer: undefined | number = undefined;
-
-    if (discountEndTime) {
-      timer = setInterval(() => {
-        const remainingTime =
-          new Date(discountEndTime).getTime() - new Date().getTime();
-        if (remainingTime <= 0) {
-          clearInterval(timer);
-          setCounter(0);
-        } else {
-          setCounter(Math.floor(remainingTime / 1000));
-        }
-      }, 1000);
-    }
-    return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
-    };
-  }, [discountEndTime]);
 
   return (
     <div className={"rounded-2xl border border-gray-300 p-2"}>

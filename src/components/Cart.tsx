@@ -1,7 +1,7 @@
 import { ProductCard } from "./ProductCard";
 import Card from "./Card";
 import { useContext } from "react";
-import { CartContext } from "../context/cartContext";
+import { CartContext } from "../context/CartContext";
 
 export default function Cart() {
   console.log("cart render");

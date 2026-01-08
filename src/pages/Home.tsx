@@ -1,6 +1,6 @@
 import Cart from "../components/Cart";
 import ProductList from "../components/ProductList";
-import { CartProvider } from "../context/cartContext";
+import { CartProvider } from "../context/CartContext";
 
 function Home() {
   console.log("Home is render");

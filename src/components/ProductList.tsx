@@ -1,44 +1,15 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { ProductCard } from "./ProductCard";
-import { getProducts, type Product } from "../api/api";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import Card from "./Card";
+import { useGetProductList } from "../api/hooks";
 
 function ProductList() {
-  const [products, setProducts] = useState<Array<Product>>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   console.log("render ProductList");
-  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    let controller = new AbortController();
-    const signal = controller.signal;
-
-    getProducts(signal).then((data) => {
-      setProducts(data);
-      setIsLoading(false);
-    });
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  const { filteredProducts, totalSum } = useMemo(() => {
-    const filteredProducts = products.filter((product) =>
-      product.name.includes(search),
-    );
-
-    const totalSum = filteredProducts.reduce(
-      (acc, product) => acc + product.price,
-      0,
-    );
-
-    return {
-      filteredProducts,
-      totalSum,
-    };
-  }, [products, search]);
+  const { isLoading, refreshProductList, filteredProducts, totalSum } =
+    useGetProductList(search);
 
   return (
     <Card className="w-full">
@@ -51,13 +22,7 @@ function ProductList() {
             placeholder="Search"
             className="grow rounded-2xl border border-gray-300 px-2.5 py-3.5"
           />
-          <button
-            onClick={() => {
-              inputRef.current?.focus();
-            }}
-          >
-            focus
-          </button>
+          <button onClick={refreshProductList}>refresh</button>
         </div>
 
         {isLoading ? (
