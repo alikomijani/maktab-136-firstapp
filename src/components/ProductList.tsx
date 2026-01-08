@@ -10,7 +10,6 @@ function ProductList() {
   const [search, setSearch] = useState("");
   const { isLoading, refreshProductList, filteredProducts, totalSum } =
     useGetProductList(search);
-
   return (
     <Card className="w-full">
       <div className="flex flex-col gap-2.5">
