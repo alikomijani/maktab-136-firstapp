@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { CartContext } from "../context/cartContext";
+import { CartContext } from "../context/CartContext";
 import { CartActionType } from "../reducers/cartReducer";
 import type { Product } from "../api/api";
+import clsx from "clsx";
 
 export type ProductCardProps = {
   id: number;
@@ -19,21 +20,23 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
   const { image, name, price, discount, discountEndTime, id } = props;
   const { dispatchCartAction, cart } = useContext(CartContext);
   const itemInCart = cart.find((item) => item.product.id === id);
-  const imageSize = size === "medium" ? 120 : 75;
+  const imageSize = size === "medium" ? 140 : "auto";
   const discountedPrice = discount ? price - discount * price : null;
   const [counter, setCounter] = useState(0);
   useEffect(() => {
     let timer: undefined | number = undefined;
+
     if (discountEndTime) {
       timer = setInterval(() => {
         const remainingTime =
           new Date(discountEndTime).getTime() - new Date().getTime();
-        setCounter(Math.floor(remainingTime / 1000));
-        if (new Date(discountEndTime).getTime() < new Date().getTime()) {
+        if (remainingTime <= 0) {
           clearInterval(timer);
+          setCounter(0);
+        } else {
+          setCounter(Math.floor(remainingTime / 1000));
         }
       }, 1000);
-      console.log(timer);
     }
     return () => {
       if (timer) {
@@ -44,11 +47,16 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
 
   return (
     <div className={"rounded-2xl border border-gray-300 p-2"}>
-      <div className={"flex justify-between"}>
+      <div
+        className={clsx(
+          "flex justify-between",
+          size === "medium" ? "flex-row" : "flex-col-reverse items-stretch",
+        )}
+      >
         <div>
           <h2>{name}</h2>
           <div>
-            {discount && discountedPrice ? (
+            {discount && discountedPrice && counter > 0 ? (
               <div>
                 <div className="flex gap-1">
                   <del>{price.toLocaleString("fa")}</del>
