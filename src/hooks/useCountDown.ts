@@ -37,5 +37,5 @@ export default function useCountDown(endTime: string | undefined) {
     };
   }, [endTime]);
 
-  return { counter, setCounter };
+  return { counter, setCounter, stopCounter };
 }
