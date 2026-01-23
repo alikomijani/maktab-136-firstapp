@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { type ChangeEventHandler, type FormEventHandler } from "react";
 import useForm from "../hooks/useForm";
+import { Link } from "react-router";
 
 type RegisterData = {
   firstName: string;
@@ -139,6 +140,9 @@ export default function Register() {
           )}
         </div>
         <button type="submit">register</button>
+        <Link to="/auth/login">
+          <div>already have an account?</div>
+        </Link>
       </form>
     </div>
   );

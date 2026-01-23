@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { CartActionType } from "../reducers/cartReducer";
 import type { Product } from "../api/api";
 import clsx from "clsx";
 import useCountDown from "../hooks/useCountDown";
+import { Link } from "react-router";
 
 export type ProductCardProps = {
   id: number;
@@ -26,83 +27,85 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
   const discountedPrice = discount ? price - discount * price : null;
 
   return (
-    <div className={"rounded-2xl border border-gray-300 p-2"}>
-      <div
-        className={clsx(
-          "flex justify-between",
-          size === "medium" ? "flex-row" : "flex-col-reverse items-stretch",
-        )}
-      >
-        <div>
-          <h2>{name}</h2>
+    <Link to={`/product/${id}`}>
+      <div className={"rounded-2xl border border-gray-300 p-2"}>
+        <div
+          className={clsx(
+            "flex justify-between",
+            size === "medium" ? "flex-row" : "flex-col-reverse items-stretch",
+          )}
+        >
           <div>
-            {discount && discountedPrice && counter > 0 ? (
-              <div>
-                <div className="flex gap-1">
-                  <del>{price.toLocaleString("fa")}</del>
-                  <div className="rounded-2xl bg-red-700 px-1 py-0.5 text-white">
-                    {(discount * 100).toLocaleString("fa")}%
+            <h2>{name}</h2>
+            <div>
+              {discount && discountedPrice && counter > 0 ? (
+                <div>
+                  <div className="flex gap-1">
+                    <del>{price.toLocaleString("fa")}</del>
+                    <div className="rounded-2xl bg-red-700 px-1 py-0.5 text-white">
+                      {(discount * 100).toLocaleString("fa")}%
+                    </div>
+                    {Math.ceil(counter / 3600)} ساعت
+                    {Math.ceil((counter % 3600) / 60)} دقیقه
+                    {Math.ceil((counter % (3600 * 60)) % 60)} ثانیه
                   </div>
-                  {Math.ceil(counter / 3600)} ساعت
-                  {Math.ceil((counter % 3600) / 60)} دقیقه
-                  {Math.ceil((counter % (3600 * 60)) % 60)} ثانیه
+                  <p>{discountedPrice.toLocaleString("fa")}</p>
                 </div>
-                <p>{discountedPrice.toLocaleString("fa")}</p>
-              </div>
-            ) : (
-              <p>{price.toLocaleString("fa")}</p>
-            )}
-          </div>
-          <div>
-            {itemInCart ? (
-              <div className="flex items-center gap-2">
+              ) : (
+                <p>{price.toLocaleString("fa")}</p>
+              )}
+            </div>
+            <div>
+              {itemInCart ? (
+                <div className="flex items-center gap-2">
+                  <button
+                    className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
+                    onClick={() => {
+                      dispatchCartAction({
+                        type: CartActionType.ADD,
+                        payload: props,
+                      });
+                    }}
+                  >
+                    +
+                  </button>
+                  <p>{itemInCart.count}</p>
+                  <button
+                    className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
+                    onClick={() => {
+                      dispatchCartAction({
+                        type: CartActionType.DECREASE,
+                        payload: props,
+                      });
+                    }}
+                  >
+                    -
+                  </button>
+                </div>
+              ) : (
                 <button
-                  className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
                   onClick={() => {
                     dispatchCartAction({
                       type: CartActionType.ADD,
                       payload: props,
                     });
                   }}
+                  className="rounded-lg bg-red-700 px-1.5 py-1 text-white"
                 >
-                  +
+                  افزودن به سبد خرید
                 </button>
-                <p>{itemInCart.count}</p>
-                <button
-                  className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
-                  onClick={() => {
-                    dispatchCartAction({
-                      type: CartActionType.DECREASE,
-                      payload: props,
-                    });
-                  }}
-                >
-                  -
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => {
-                  dispatchCartAction({
-                    type: CartActionType.ADD,
-                    payload: props,
-                  });
-                }}
-                className="rounded-lg bg-red-700 px-1.5 py-1 text-white"
-              >
-                افزودن به سبد خرید
-              </button>
-            )}
+              )}
+            </div>
           </div>
+          <img
+            className="rounded-2xl"
+            src={image}
+            alt={name}
+            width={imageSize}
+            height={imageSize}
+          />
         </div>
-        <img
-          className="rounded-2xl"
-          src={image}
-          alt={name}
-          width={imageSize}
-          height={imageSize}
-        />
       </div>
-    </div>
+    </Link>
   );
 }

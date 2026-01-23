@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { getProducts, type Product } from "./api";
+import { getProductById, getProducts, type Product } from "./api";
 
-export function useGetProductList(search: string) {
+export function useGetProductList(params: {
+  search?: string;
+  category?: string;
+}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const controllerRef = useRef<AbortController>(null);
 
   const refreshProductList = useCallback(async () => {
@@ -16,7 +18,7 @@ export function useGetProductList(search: string) {
 
     setIsLoading(true);
     try {
-      const data = await getProducts(controller.signal);
+      const data = await getProducts(params, controller.signal);
       setProducts(data);
     } catch (err: any) {
       // Abort is expected; don't treat it as an error
@@ -25,10 +27,11 @@ export function useGetProductList(search: string) {
       // only end loading if this request is still the latest one
       if (controllerRef.current === controller) setIsLoading(false);
     }
-  }, []);
+  }, [params.category, params.search]);
+
   const { filteredProducts, totalSum } = useMemo(() => {
     const filteredProducts = products.filter((product) =>
-      product.name.includes(search),
+      product.name.includes(params.search || ""),
     );
 
     const totalSum = filteredProducts.reduce(
@@ -40,7 +43,7 @@ export function useGetProductList(search: string) {
       filteredProducts,
       totalSum,
     };
-  }, [products, search]);
+  }, [products, params.search]);
 
   useEffect(() => {
     refreshProductList();
@@ -53,5 +56,31 @@ export function useGetProductList(search: string) {
     refreshProductList,
     filteredProducts,
     totalSum,
+  };
+}
+
+export function useGetProductById(id: string | undefined) {
+  const [product, setState] = useState<Product | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    setIsLoading(true);
+    setError("");
+    getProductById(id)
+      .then((data) => {
+        setState(data);
+      })
+      .catch((e) => {
+        setError("error on get product");
+        console.log(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [id]);
+  return {
+    product,
+    isLoading,
+    error,
   };
 }

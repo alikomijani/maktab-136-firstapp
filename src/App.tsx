@@ -1,10 +1,11 @@
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
-import Register from "./pages/Register";
+
+import AppRouter from "./router";
 function App() {
   return (
     <ErrorBoundary fallback={<>خطا در اپلیکیشن</>}>
-      <Register />
+      <AppRouter />
     </ErrorBoundary>
   );
 }

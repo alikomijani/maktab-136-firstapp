@@ -3,15 +3,20 @@ import {
   type ChangeEventHandler,
   type FormEventHandler,
 } from "react";
+import { Link, useNavigate } from "react-router";
 
 type LoginData = {
   email: string;
   password: string;
 };
 export default function Login() {
+  const navigate = useNavigate();
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     console.log(data);
+    if (data.email && data.password) {
+      navigate("/");
+    }
   };
   const [data, setData] = useState<LoginData>({
     email: "",
@@ -48,11 +53,14 @@ export default function Login() {
         </div>
         <div className="form-field">
           <button
-            className="border-0 bg-amber-800 text-amber-50 p-2"
+            className="border-0 bg-amber-800 p-2 text-amber-50"
             type="submit"
           >
             Login
           </button>
+          <Link to="/auth/register">
+            <div>don't have an account?</div>
+          </Link>
         </div>
       </form>
     </div>
