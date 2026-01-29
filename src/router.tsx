@@ -2,8 +2,8 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import Timer from "./pages/Timer";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/auth/login/page";
+import Register from "./pages/auth/register/page";
 import ProductPage from "./pages/ProductPage";
 
 export default function AppRouter() {

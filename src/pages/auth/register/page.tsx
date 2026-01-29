@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { type ChangeEventHandler, type FormEventHandler } from "react";
-import useForm from "../hooks/useForm";
 import { Link } from "react-router";
+import useForm from "../../../hooks/useForm";
 
 type RegisterData = {
   firstName: string;
