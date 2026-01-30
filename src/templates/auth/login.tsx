@@ -1,9 +1,17 @@
 import { useForm, Controller } from "react-hook-form";
-type LoginData = {
-  username: string;
-  password: string;
-  password2: string;
-};
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import fa from "zod/v4/locales/fa.js";
+
+z.config(fa());
+
+export const LoginFormSchema = z.object({
+  username: z.email(),
+  password: z.string().min(8, "کلمه عبور باید بیشتر از ۸ کارکتر باشد"),
+});
+
+type LoginData = z.infer<typeof LoginFormSchema>;
+
 export default function LoginForm() {
   const {
     register, // وصل کردن اینپوت به فرم
@@ -12,14 +20,15 @@ export default function LoginForm() {
     watch, // گرفتن مقدار یه اینپوت
     reset, //ریست فرم و یا ست کردن دیفالت ولیو
     setValue, // ست کردن ولیو استفاده میشه
-    getValues, // خوندن همه مقادیر فرم استفاده میشه
     control,
   } = useForm<LoginData>({
+    resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       username: "ali",
+      password: "",
     },
   });
-  console.log("render");
+
   return (
     <form noValidate onSubmit={handleSubmit((data) => console.log(data))}>
       <div className="mb-4">
@@ -72,22 +81,6 @@ export default function LoginForm() {
         />
       </div>
 
-      <div className="mb-6">
-        <label
-          className="mb-2 block text-sm font-bold text-gray-700"
-          htmlFor="password"
-        >
-          Repeat Password
-        </label>
-        <input
-          className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          id="password"
-          type="password"
-          placeholder="******************"
-          {...register("password2")}
-        />
-        <p className="text-xs italic">{errors.password2?.message}</p>
-      </div>
       <button type="submit">login</button>
       <button
         type="button"
