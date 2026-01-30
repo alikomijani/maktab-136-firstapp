@@ -1,25 +1,13 @@
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import fa from "zod/v4/locales/fa.js";
-
-z.config(fa());
-
-export const LoginFormSchema = z.object({
-  username: z.email(),
-  password: z.string().min(8, "کلمه عبور باید بیشتر از ۸ کارکتر باشد"),
-});
-
-type LoginData = z.infer<typeof LoginFormSchema>;
+import { LoginFormSchema, type LoginData } from "./login.validation";
 
 export default function LoginForm() {
   const {
     register, // وصل کردن اینپوت به فرم
     handleSubmit, // هندل کردن ایونت سابمیت هست.
     formState: { errors }, // خطاهای ولیدیشن
-    watch, // گرفتن مقدار یه اینپوت
     reset, //ریست فرم و یا ست کردن دیفالت ولیو
-    setValue, // ست کردن ولیو استفاده میشه
     control,
   } = useForm<LoginData>({
     resolver: zodResolver(LoginFormSchema),
@@ -43,10 +31,7 @@ export default function LoginForm() {
           id="username"
           type="text"
           placeholder="Username"
-          {...register("username", {
-            validate: (value) =>
-              value !== "ali" ? "مقدار باید برابر ali باشد" : undefined,
-          })}
+          {...register("username")}
         />
         <p className="text-xs italic">{errors.username?.message}</p>
       </div>
@@ -60,9 +45,6 @@ export default function LoginForm() {
         <Controller
           name="password"
           control={control}
-          rules={{
-            required: "این فیلد اجباری است",
-          }}
           render={({ field, fieldState }) => (
             <>
               <input
@@ -82,14 +64,7 @@ export default function LoginForm() {
       </div>
 
       <button type="submit">login</button>
-      <button
-        type="button"
-        onClick={() => {
-          reset({
-            username: "reza",
-          });
-        }}
-      >
+      <button type="button" onClick={() => reset()}>
         reset
       </button>
     </form>
