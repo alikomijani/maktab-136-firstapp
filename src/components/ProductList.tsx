@@ -2,10 +2,13 @@ import { memo, useRef, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import Card from "./Card";
-import { useGetProductList } from "../api/hooks";
 import { useSearchParams } from "react-router";
+import { getProducts } from "../api/api";
+import { useQuery } from "@tanstack/react-query";
+import { useGetProductList } from "../api/hooks";
 
 const categories = ["سنتی", "صبحانه", "ناهار", "شام"];
+
 function validateCategory(input: string | null) {
   if (!input) {
     return undefined;
@@ -21,8 +24,15 @@ function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const category = validateCategory(searchParams.get("category")); // xss attack
   const [search, setSearch] = useState("");
-  const { isLoading, refreshProductList, filteredProducts, totalSum } =
-    useGetProductList({ search, category });
+
+  const {
+    data: products,
+    refetch,
+    isLoading,
+    isError,
+  } = useGetProductList({ search, category });
+  console.log(products, isError);
+  const totalSum = 2;
   return (
     <Card className="w-full">
       <div className="flex flex-col gap-2.5">
@@ -34,7 +44,7 @@ function ProductList() {
             placeholder="Search"
             className="grow rounded-2xl border border-gray-300 px-2.5 py-3.5"
           />
-          <button onClick={refreshProductList}>refresh</button>
+          <button onClick={() => refetch()}>refresh</button>
         </div>
         <div className="flex gap-2">
           {categories.map((category) => (
@@ -53,7 +63,7 @@ function ProductList() {
         {isLoading ? (
           <ProductCardSkeleton />
         ) : (
-          filteredProducts.map((item) => (
+          products?.map((item) => (
             <ProductCard
               key={item.id}
               id={item.id}

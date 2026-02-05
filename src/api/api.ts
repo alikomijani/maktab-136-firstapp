@@ -1,3 +1,4 @@
+import { http } from "./http";
 export type Product = {
   id: number;
   name: string;
@@ -9,30 +10,14 @@ export type Product = {
   discountEndTime?: string;
 };
 
-export async function getProducts(
-  params: any,
-  signal: AbortSignal,
-): Promise<Array<Product>> {
-  // {category: 'lunch' ,search:"برنج"}
-
-  const searchParams = new URLSearchParams(params);
-
-  const res = await fetch(
-    `http://localhost:3000/products?${searchParams.toString()}`,
-    { signal },
-  );
-  const data = await res.json();
-  return data;
+export async function getProducts(params: any) {
+  return (
+    await http.get<Array<Product>>("/products", {
+      params,
+    })
+  ).data;
 }
 
-export async function getProductById(
-  id: string | undefined,
-  signal?: AbortSignal,
-): Promise<Product> {
-  if (!id) {
-    throw new Error("id should provided");
-  }
-  const res = await fetch(`http://localhost:3000/products/${id}`, { signal });
-  const data = await res.json();
-  return data;
+export async function getProductById(id: string) {
+  return (await http.get<Product>(`/products/${id}`)).data;
 }
