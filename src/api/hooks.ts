@@ -1,5 +1,5 @@
-import { getProductById, getProducts } from "./api";
-import { useQuery } from "@tanstack/react-query";
+import { createProduct, getProductById, getProducts } from "./api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export function useGetProductList({
   search,
@@ -10,7 +10,7 @@ export function useGetProductList({
 }) {
   return useQuery({
     queryFn: () => getProducts({ search, category }),
-    queryKey: ["products", category, search],
+    queryKey: ["products-list", category, search],
   });
 }
 
@@ -19,5 +19,12 @@ export function useGetProductById(id: string | undefined) {
     queryFn: () => getProductById(id!),
     queryKey: ["products", id],
     enabled: !!id,
+  });
+}
+
+export function useCreateProduct() {
+  return useMutation({
+    mutationFn: createProduct,
+    mutationKey: ["create-product"],
   });
 }

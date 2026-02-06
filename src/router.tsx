@@ -5,6 +5,9 @@ import Layout from "./components/Layout";
 import Login from "./pages/auth/login/page";
 import Register from "./pages/auth/register/page";
 import ProductPage from "./pages/ProductPage";
+import AdminProductListPage from "./pages/admin/products/page";
+import AdminProductSingle from "./pages/admin/products/[id]/page";
+import AdminProductCreate from "./pages/admin/products/create/page";
 
 export default function AppRouter() {
   return (
@@ -22,6 +25,11 @@ export default function AppRouter() {
         >
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+        </Route>
+        <Route path="/admin">
+          <Route path="products" element={<AdminProductListPage />} />
+          <Route path="products/create" element={<AdminProductCreate />} />
+          <Route path="products/:id" element={<AdminProductSingle />} />
         </Route>
         <Route element={<Layout />}>
           <Route index element={<Home />} />

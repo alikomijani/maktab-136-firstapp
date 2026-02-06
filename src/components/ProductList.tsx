@@ -2,36 +2,20 @@ import { memo, useRef, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import Card from "./Card";
-import { useSearchParams } from "react-router";
-import { getProducts } from "../api/api";
-import { useQuery } from "@tanstack/react-query";
 import { useGetProductList } from "../api/hooks";
-
-const categories = ["سنتی", "صبحانه", "ناهار", "شام"];
-
-function validateCategory(input: string | null) {
-  if (!input) {
-    return undefined;
-  }
-  if (categories.indexOf(input) > -1) {
-    return input;
-  }
-  return undefined;
-}
+import { categories } from "../utils/category";
+import useCategoryParam from "../hooks/useCategoryParam";
 
 function ProductList() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const category = validateCategory(searchParams.get("category")); // xss attack
+  const [category, setCategory] = useCategoryParam();
   const [search, setSearch] = useState("");
-
   const {
     data: products,
     refetch,
     isLoading,
-    isError,
   } = useGetProductList({ search, category });
-  console.log(products, isError);
+
   const totalSum = 2;
   return (
     <Card className="w-full">
@@ -51,7 +35,7 @@ function ProductList() {
             <button
               className="rounded-2xl border px-8 py-2"
               onClick={() => {
-                setSearchParams({ category }); // setSearchParams({ category:'ناهار' });
+                setCategory(category); // setSearchParams({ category:'ناهار' });
               }}
               key={category}
             >
