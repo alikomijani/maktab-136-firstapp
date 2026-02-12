@@ -1,14 +1,14 @@
 {
   "products": [
     {
-      "id": 1,
       "name": "نیمرو رژیمی",
+      "price": 45000,
       "category": "صبحانه",
       "description": "۳ عدد تخم مرغ زرده طلایی، بدون روغن، دورچین: فلفل، پیاز، لیمو ترش، به همراه نصف نان بربری",
-      "price": 45000,
-      "image": "https://picsum.photos/400/300?random=1",
-      "discount": 0.2,
-      "discountEndTime": "2026-01-09T09:21:26.970Z"
+      "image": "https://picsum.photos/400/300?random=2",
+      "discount": 1.2,
+      "discountEndTime": "2026-01-09T09:21",
+      "id": 1
     },
     {
       "id": 2,
@@ -85,7 +85,29 @@
       "description": "بادمجان کبابی، کشک، سیر، نعناع خشک، غذای سنتی ایرانی",
       "price": 95000,
       "image": "https://picsum.photos/400/300?random=10"
+    },
+    {
+      "name": "سبزی پلو",
+      "price": "350000",
+      "category": "ناهار",
+      "description": "سبزی پلو",
+      "image": "https://digi.com/a.jpg",
+      "discount": "1",
+      "discountEndTime": "2026-02-13T11:59",
+      "id": 11
+    },
+    {
+      "name": "Jared Mueller",
+      "price": "64",
+      "category": "Laboris in minim dol",
+      "description": "Alias optio volupta",
+      "image": "Aperiam ab laboris r",
+      "discount": "82",
+      "discountEndTime": "2008-04-05T23:38",
+      "id": 12
     }
   ],
-  "profile": { "name": "typicode" }
+  "profile": {
+    "name": "typicode"
+  }
 }

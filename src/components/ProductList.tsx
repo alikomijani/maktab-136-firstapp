@@ -3,26 +3,20 @@ import { ProductCard } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import Card from "./Card";
 import { useGetProductList } from "../api/hooks";
-import { useSearchParams } from "react-router";
-
-const categories = ["سنتی", "صبحانه", "ناهار", "شام"];
-function validateCategory(input: string | null) {
-  if (!input) {
-    return undefined;
-  }
-  if (categories.indexOf(input) > -1) {
-    return input;
-  }
-  return undefined;
-}
+import { categories } from "../utils/category";
+import useCategoryParam from "../hooks/useCategoryParam";
 
 function ProductList() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const category = validateCategory(searchParams.get("category")); // xss attack
+  const [category, setCategory] = useCategoryParam();
   const [search, setSearch] = useState("");
-  const { isLoading, refreshProductList, filteredProducts, totalSum } =
-    useGetProductList({ search, category });
+  const {
+    data: products,
+    refetch,
+    isLoading,
+  } = useGetProductList({ search, category });
+
+  const totalSum = 2;
   return (
     <Card className="w-full">
       <div className="flex flex-col gap-2.5">
@@ -34,14 +28,14 @@ function ProductList() {
             placeholder="Search"
             className="grow rounded-2xl border border-gray-300 px-2.5 py-3.5"
           />
-          <button onClick={refreshProductList}>refresh</button>
+          <button onClick={() => refetch()}>refresh</button>
         </div>
         <div className="flex gap-2">
           {categories.map((category) => (
             <button
               className="rounded-2xl border px-8 py-2"
               onClick={() => {
-                setSearchParams({ category }); // setSearchParams({ category:'ناهار' });
+                setCategory(category); // setSearchParams({ category:'ناهار' });
               }}
               key={category}
             >
@@ -53,7 +47,7 @@ function ProductList() {
         {isLoading ? (
           <ProductCardSkeleton />
         ) : (
-          filteredProducts.map((item) => (
+          products?.map((item) => (
             <ProductCard
               key={item.id}
               id={item.id}

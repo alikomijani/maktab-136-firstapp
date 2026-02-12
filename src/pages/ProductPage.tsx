@@ -1,14 +1,20 @@
 import { useParams } from "react-router";
-import { useGetProductById } from "../api/hooks";
 import { CartContext } from "../context/CartContext";
 import { useContext } from "react";
 import useCountDown from "../hooks/useCountDown";
 import { clsx } from "clsx";
 import { CartActionType } from "../reducers/cartReducer";
+import type { Product } from "../api/api";
+import { http } from "../api/http";
+import { useGetProductById } from "../api/hooks";
+
+export async function getProductById(id: string) {
+  return (await http.get<Product>(`/products/${id}`)).data;
+}
 
 export default function ProductPage() {
   const { id } = useParams();
-  const { product, error, isLoading } = useGetProductById(id);
+  const { data: product, isLoading, error } = useGetProductById(id);
   const { dispatchCartAction, cart } = useContext(CartContext);
   const itemInCart = cart.find((item) => item.product.id.toString() === id);
   const { counter } = useCountDown(product?.discountEndTime || "0");
