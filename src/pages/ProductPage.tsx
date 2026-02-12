@@ -1,13 +1,11 @@
 import { useParams } from "react-router";
-import { CartContext } from "../context/CartContext";
-import { useContext } from "react";
 import useCountDown from "../hooks/useCountDown";
 import { clsx } from "clsx";
-import { CartActionType } from "../reducers/cartReducer";
 import type { Product } from "../api/api";
 import { http } from "../api/http";
 import { useGetProductById } from "../api/hooks";
-
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { add, decrease } from "../redux/slices/cartSlice";
 export async function getProductById(id: string) {
   return (await http.get<Product>(`/products/${id}`)).data;
 }
@@ -15,8 +13,10 @@ export async function getProductById(id: string) {
 export default function ProductPage() {
   const { id } = useParams();
   const { data: product, isLoading, error } = useGetProductById(id);
-  const { dispatchCartAction, cart } = useContext(CartContext);
-  const itemInCart = cart.find((item) => item.product.id.toString() === id);
+  const itemInCart = useAppSelector((store) =>
+    store.cart.items.find((item) => item.product.id === Number(id)),
+  );
+  const dispatch = useAppDispatch();
   const { counter } = useCountDown(product?.discountEndTime || "0");
   if (isLoading || !product) {
     return <div>در حال بارگزاری</div>;
@@ -56,10 +56,7 @@ export default function ProductPage() {
                 <button
                   className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
                   onClick={() => {
-                    dispatchCartAction({
-                      type: CartActionType.ADD,
-                      payload: product,
-                    });
+                    dispatch(add(product));
                   }}
                 >
                   +
@@ -68,10 +65,7 @@ export default function ProductPage() {
                 <button
                   className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
                   onClick={() => {
-                    dispatchCartAction({
-                      type: CartActionType.DECREASE,
-                      payload: product,
-                    });
+                    dispatch(decrease(product));
                   }}
                 >
                   -
@@ -80,10 +74,7 @@ export default function ProductPage() {
             ) : (
               <button
                 onClick={() => {
-                  dispatchCartAction({
-                    type: CartActionType.ADD,
-                    payload: product,
-                  });
+                  dispatch(add(product));
                 }}
                 className="rounded-lg bg-red-700 px-1.5 py-1 text-white"
               >
