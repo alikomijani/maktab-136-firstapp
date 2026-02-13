@@ -3,14 +3,17 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Provider } from "react-redux";
 import AppRouter from "./router";
 import { QueryProvider } from "./context/QueryClientProvider";
-import { store } from "./redux/store";
+import { persistor, store } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 function App() {
   return (
     <ErrorBoundary fallback={<>خطا در اپلیکیشن</>}>
       <Provider store={store}>
-        <QueryProvider>
-          <AppRouter />
-        </QueryProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <QueryProvider>
+            <AppRouter />
+          </QueryProvider>
+        </PersistGate>
       </Provider>
     </ErrorBoundary>
   );

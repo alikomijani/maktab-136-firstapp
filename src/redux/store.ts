@@ -1,13 +1,39 @@
 import { configureStore } from "@reduxjs/toolkit";
-import cartReducer from "./slices/cartSlice";
+import { createLogger } from "redux-logger";
+import persistStore from "redux-persist/es/persistStore";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+
+import persistedReducer from "./persisted-reducer";
+const isDev = import.meta.env.DEV;
+
+const logger = createLogger({
+  diff: true,
+  duration: true,
+});
 
 export const store = configureStore({
-  reducer: {
-    cart: cartReducer,
+  reducer: persistedReducer,
+  middleware(getDefaultMiddleware) {
+    let defaultMiddlewares = getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    });
+    if (isDev) {
+      return defaultMiddlewares.concat(logger);
+    }
+    return defaultMiddlewares;
   },
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
+export const persistor = persistStore(store);
+
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
