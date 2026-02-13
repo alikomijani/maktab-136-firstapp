@@ -6,7 +6,7 @@ const persistConfig = {
   key: "redux-store",
   storage,
   version: 2,
-  whitelist: ["cart"],
+  whitelist: ["cart", "auth"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);
