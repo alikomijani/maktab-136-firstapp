@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useGetProductList } from "../../../api/hooks";
 import useCategoryParam from "../../../hooks/useCategoryParam";
 import { useNavigate } from "react-router";
+import { useGetProductList } from "../../../api/products/hooks";
 
 export default function AdminProductListPage() {
   const [category, setCategory] = useCategoryParam();

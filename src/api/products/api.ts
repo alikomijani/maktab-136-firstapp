@@ -1,5 +1,5 @@
-import type { ProductPayload } from "../validations/product.validation";
-import { http } from "./http";
+import type { ProductPayload } from "../../validations/product.validation";
+import { http } from "../http";
 export type Product = {
   id: number;
   name: string;

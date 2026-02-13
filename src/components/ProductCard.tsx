@@ -1,9 +1,9 @@
-import type { Product } from "../api/api";
 import clsx from "clsx";
 import useCountDown from "../hooks/useCountDown";
 import { Link } from "react-router";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { add, decrease } from "../redux/slices/cartSlice";
+import type { Product } from "../api/products/api";
 export type ProductCardProps = {
   id: number;
   name: string;

@@ -1,11 +1,11 @@
 import { useParams } from "react-router";
 import useCountDown from "../hooks/useCountDown";
 import { clsx } from "clsx";
-import type { Product } from "../api/api";
 import { http } from "../api/http";
-import { useGetProductById } from "../api/hooks";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { add, decrease } from "../redux/slices/cartSlice";
+import type { Product } from "../api/products/api";
+import { useGetProductById } from "../api/products/hooks";
 export async function getProductById(id: string) {
   return (await http.get<Product>(`/products/${id}`)).data;
 }
