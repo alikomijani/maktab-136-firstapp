@@ -1,4 +1,4 @@
-import type { Product } from "../api/api";
+import type { Product } from "../api/products/api";
 
 export enum CartActionType {
   ADD,

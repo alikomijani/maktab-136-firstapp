@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProduct, type Product } from "../../../../api/api";
 import { useNavigate } from "react-router";
+import { createProduct, type Product } from "../../../../api/products/api";
 
 export default function AdminProductCreate() {
   const navigate = useNavigate();

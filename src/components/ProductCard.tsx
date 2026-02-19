@@ -1,11 +1,9 @@
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import { CartActionType } from "../reducers/cartReducer";
-import type { Product } from "../api/api";
 import clsx from "clsx";
 import useCountDown from "../hooks/useCountDown";
 import { Link } from "react-router";
-
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { add, decrease } from "../redux/slices/cartSlice";
+import type { Product } from "../api/products/api";
 export type ProductCardProps = {
   id: number;
   name: string;
@@ -20,9 +18,11 @@ export type ProductCardProps = {
 
 export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
   const { image, name, price, discount, discountEndTime, id } = props;
-  const { dispatchCartAction, cart } = useContext(CartContext);
   const { counter } = useCountDown(discountEndTime);
-  const itemInCart = cart.find((item) => item.product.id === id);
+  const itemInCart = useAppSelector((store) =>
+    store.cart.items.find((item) => item.product.id == id),
+  );
+  const dispatch = useAppDispatch();
   const imageSize = size === "medium" ? 140 : "auto";
   const discountedPrice = discount ? price - discount * price : null;
 
@@ -60,11 +60,10 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
                 <div className="flex items-center gap-2">
                   <button
                     className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
-                    onClick={() => {
-                      dispatchCartAction({
-                        type: CartActionType.ADD,
-                        payload: props,
-                      });
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      dispatch(add(props));
                     }}
                   >
                     +
@@ -72,11 +71,10 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
                   <p>{itemInCart.count}</p>
                   <button
                     className="rounded-lg border border-red-500 bg-white px-2 py-1 text-xl font-bold text-red-500"
-                    onClick={() => {
-                      dispatchCartAction({
-                        type: CartActionType.DECREASE,
-                        payload: props,
-                      });
+                    onClickCapture={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      dispatch(decrease(props));
                     }}
                   >
                     -
@@ -84,11 +82,10 @@ export function ProductCard({ size = "medium", ...props }: ProductCardProps) {
                 </div>
               ) : (
                 <button
-                  onClick={() => {
-                    dispatchCartAction({
-                      type: CartActionType.ADD,
-                      payload: props,
-                    });
+                  onClickCapture={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dispatch(add(props));
                   }}
                   className="rounded-lg bg-red-700 px-1.5 py-1 text-white"
                 >

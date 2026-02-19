@@ -1,16 +1,14 @@
 import { ProductCard } from "./ProductCard";
 import Card from "./Card";
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
-
+import { useAppSelector } from "../redux/hooks";
 export default function Cart() {
-  console.log("cart render");
-  const { cart } = useContext(CartContext);
+  const cart = useAppSelector((store) => store.cart);
+  const { items, totalItems, totalPrice } = cart;
   return (
     <Card className="max-w-2xs">
       <div className="flex flex-col gap-2.5">
-        {cart.length === 0 ? <h1>سبد خرید شما خالی است.</h1> : undefined}
-        {cart.map(({ product, count }) => (
+        {totalItems === 0 ? <h1>سبد خرید شما خالی است.</h1> : undefined}
+        {items.map(({ product, count }) => (
           <div key={product.id}>
             <ProductCard
               id={product.id}
@@ -30,6 +28,9 @@ export default function Cart() {
           </div>
         ))}
       </div>
+      <hr />
+      <p>total items: {totalItems} </p>
+      <p>total price: {totalPrice} </p>
     </Card>
   );
 }

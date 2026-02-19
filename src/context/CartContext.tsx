@@ -5,7 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import { cartReducer, type CartAction } from "../reducers/cartReducer";
-import type { Product } from "../api/api";
+import type { Product } from "../api/products/api";
 
 type Cart = {
   product: Product;

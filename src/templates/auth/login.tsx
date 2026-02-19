@@ -1,8 +1,15 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginFormSchema, type LoginData } from "./login.validation";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { fakeLoginAction } from "../../redux/slices/authSlice";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export default function LoginForm() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const auth = useAppSelector((state) => state.auth);
   const {
     register, // وصل کردن اینپوت به فرم
     handleSubmit, // هندل کردن ایونت سابمیت هست.
@@ -17,8 +24,19 @@ export default function LoginForm() {
     },
   });
 
+  useEffect(() => {
+    if (auth.isLogin) {
+      navigate("/");
+    }
+  }, [auth.isLogin]);
+
   return (
-    <form noValidate onSubmit={handleSubmit((data) => console.log(data))}>
+    <form
+      noValidate
+      onSubmit={handleSubmit((data) => {
+        dispatch(fakeLoginAction(data));
+      })}
+    >
       <div className="mb-4">
         <label
           className="mb-2 block text-sm font-bold text-gray-700"
@@ -63,8 +81,18 @@ export default function LoginForm() {
         />
       </div>
 
-      <button type="submit">login</button>
-      <button type="button" onClick={() => reset()}>
+      <button
+        disabled={auth.isLoading}
+        className="mx-2 rounded-2xl border px-4 py-2 disabled:text-neutral-400"
+        type="submit"
+      >
+        login
+      </button>
+      <button
+        className="mx-2 rounded-2xl border px-4 py-2"
+        type="button"
+        onClick={() => reset()}
+      >
         reset
       </button>
     </form>

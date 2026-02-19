@@ -2,9 +2,9 @@ import { memo, useRef, useState } from "react";
 import { ProductCard } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import Card from "./Card";
-import { useGetProductList } from "../api/hooks";
 import { categories } from "../utils/category";
 import useCategoryParam from "../hooks/useCategoryParam";
+import { useGetProductList } from "../api/products/hooks";
 
 function ProductList() {
   const inputRef = useRef<HTMLInputElement>(null);

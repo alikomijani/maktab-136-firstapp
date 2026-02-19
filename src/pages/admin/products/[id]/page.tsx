@@ -1,8 +1,8 @@
 import { useParams } from "react-router";
-import { useGetProductById } from "../../../../api/hooks";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { updateProduct } from "../../../../api/api";
+import { useGetProductById } from "../../../../api/products/hooks";
+import { updateProduct } from "../../../../api/products/api";
 
 export default function AdminProductSingle() {
   const { id } = useParams();
