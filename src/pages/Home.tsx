@@ -2,12 +2,13 @@ import { ErrorBoundary } from "react-error-boundary";
 import Cart from "../components/Cart";
 import ProductList from "../components/ProductList";
 import { CartProvider } from "../context/CartContext";
+import { Container } from "@mui/material";
 
 function Home() {
   console.log("Home is render");
 
   return (
-    <div className="container mx-auto max-w-2xl">
+    <Container maxWidth="md">
       <div className="mt-5 flex justify-between gap-5">
         <ErrorBoundary
           fallback={<div>خطا در سبد خرید</div>}
@@ -22,7 +23,7 @@ function Home() {
           </CartProvider>
         </ErrorBoundary>
       </div>
-    </div>
+    </Container>
   );
 }
 

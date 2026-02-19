@@ -1,12 +1,13 @@
 import { Link, NavLink, Outlet } from "react-router";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { logout } from "../redux/slices/authSlice";
+import { Button, Container } from "@mui/material";
 
 export default function Layout() {
   const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   return (
-    <div className="container mx-auto max-w-2xl">
+    <Container>
       <div className="flex items-center justify-between">
         <nav className="flex gap-2 *:p-4">
           <NavLink
@@ -43,12 +44,14 @@ export default function Layout() {
             {auth.user?.firstName} {auth.user?.lastName}
           </button>
         ) : (
-          <Link to={"/auth/login"}>login</Link>
+          <Button component={Link} to={"/auth/login"}>
+            login
+          </Button>
         )}
       </div>
 
       <hr />
       <Outlet />
-    </div>
+    </Container>
   );
 }

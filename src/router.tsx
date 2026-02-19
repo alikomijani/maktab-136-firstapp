@@ -13,16 +13,7 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/auth"
-          element={
-            <div className="container mx-auto h-svh w-sm">
-              <div className="mt-10 rounded-2xl border p-4">
-                <Outlet />
-              </div>
-            </div>
-          }
-        >
+        <Route path="/auth" element={<Outlet />}>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
